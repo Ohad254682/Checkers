@@ -1,13 +1,13 @@
 /*App*/
 table {
-  width: 60vh;
-  height: 60vh;
+  width: 70vh;
+  height: 70vh;
   margin: 0px auto;
   margin-bottom: 15px;
-  min-width: 400px;
-  min-height: 400px;
-  max-width: 60vh;
-  max-height: 60vh;
+  min-width: 500px;
+  min-height: 500px;
+  max-width: 70vh;
+  max-height: 70vh;
 }
 
 tbody {
@@ -17,6 +17,14 @@ tbody {
 
 .board-game {
   position: relative;
+}
+
+.controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
 .content {
@@ -40,6 +48,12 @@ tbody {
     min-height: 350px;
     max-width: 60vh;
     max-height: 60vh;
+    margin-bottom: 15px;
+  }
+  
+  .controls-row {
+    flex-direction: column;
+    gap: 10px;
     margin-bottom: 15px;
   }
   
@@ -85,6 +99,12 @@ tbody {
     max-width: 70vh;
     max-height: 70vh;
     margin-bottom: 15px;
+  }
+  
+  .controls-row {
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 10px;
   }
   
   .content {

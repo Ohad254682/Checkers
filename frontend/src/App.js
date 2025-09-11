@@ -468,7 +468,10 @@ export default class App extends Component {
   render() {
     return (
       <div className="flex column justify-center align-center">
-        <Message turn={this.state.turn} choosePlayer={this.choosePlayer} player={this.state.player} isAbleToCapture={this.state.isAbleToCapture}></Message>
+        <div className="controls-row">
+          <button className="restart-game" onClick={this.restartGame}>Restart Game</button>
+          <Message turn={this.state.turn} choosePlayer={this.choosePlayer} player={this.state.player} isAbleToCapture={this.state.isAbleToCapture}></Message>
+        </div>
         <div className="content">
           <div className="board-game">
           <Winner isWon={this.state.isWon} winner={this.state.winner}></Winner>
@@ -496,7 +499,6 @@ export default class App extends Component {
             </ul>
           </aside>
         </div>
-        <button className="restart-game" onClick={this.restartGame}>Restart Game</button>
         {/* <button onClick={this.undoBoard}>Undo</button> */}
         
         {/* Help Button for Mobile/Tablet */}
