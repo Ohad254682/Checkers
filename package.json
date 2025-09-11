@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "Multiplayer checkers game with React frontend and Node.js backend",
   "scripts": {
-    "build": "cd frontend && npm install && npm run build",
-    "start": "cd backend && npm install && npm run server:prod",
+    "build": "cd frontend && npm install && npm run build && cd ../backend && mkdir -p public && cp -r ../frontend/build/* public/",
+    "start": "cd backend && npm install && npm start",
     "install-frontend": "cd frontend && npm install",
     "install-backend": "cd backend && npm install",
     "build-frontend": "cd frontend && npm run build",
-    "start-backend": "cd backend && npm run server:prod"
+    "start-backend": "cd backend && npm start"
   },
   "engines": {
     "node": ">=16.0.0",

@@ -11,19 +11,24 @@ const io = require('socket.io')(http, {
 });
 const connectSockets = require('./api/socket/socket.routes')
 
-if (process.env.NODE_ENV === 'production') {
-    console.log('Running in production mode');
-    console.log('Public directory:', path.resolve(__dirname, 'public'));
-    
-    app.use(express.static(path.resolve(__dirname, 'public')));
+// Always serve static files if they exist
+const publicPath = path.resolve(__dirname, 'public');
+console.log('Public directory:', publicPath);
+console.log('NODE_ENV:', process.env.NODE_ENV);
+
+// Check if public directory exists
+const fs = require('fs');
+if (fs.existsSync(publicPath)) {
+    console.log('Serving static files from:', publicPath);
+    app.use(express.static(publicPath));
     
     // Serve React app for all routes
     app.get('*', (req, res) => {
         console.log('Serving index.html for route:', req.path);
-        res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+        res.sendFile(path.resolve(publicPath, 'index.html'));
     });
 } else {
-    console.log('Running in development mode');
+    console.log('Public directory does not exist, running in development mode');
     // Simple CORS for development
     app.use((req, res, next) => {
         res.header('Access-Control-Allow-Origin', '*');
