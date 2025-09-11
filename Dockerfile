@@ -16,7 +16,8 @@ RUN cd backend && npm install
 COPY frontend/ ./frontend/
 COPY backend/ ./backend/
 
-# Build frontend
+# Build frontend with OpenSSL legacy provider
+ENV NODE_OPTIONS="--openssl-legacy-provider"
 RUN cd frontend && npm run build
 
 # Copy built frontend to backend public folder
