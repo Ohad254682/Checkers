@@ -1,13 +1,13 @@
 /*App*/
 table {
-  width: 35vw;
-  height: 35vw;
+  width: 50vh;
+  height: 50vh;
   margin: 0px auto;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   min-width: 300px;
   min-height: 300px;
-  max-width: 70vh;
-  max-height: 70vh;
+  max-width: 50vh;
+  max-height: 50vh;
 }
 
 tbody {
@@ -271,8 +271,8 @@ td {
 
 /*Message*/
 .msg {
-  margin-top: 50px;
-  margin-bottom: 50px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
   color: #e5e7eb;
   padding: 12px 16px;
