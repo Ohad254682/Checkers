@@ -1,0 +1,24 @@
+{
+  "name": "checkers-game",
+  "version": "1.0.0",
+  "description": "Multiplayer checkers game with React frontend and Node.js backend",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "start": "cd backend && npm install && npm run server:prod",
+    "install-frontend": "cd frontend && npm install",
+    "install-backend": "cd backend && npm install",
+    "build-frontend": "cd frontend && npm run build",
+    "start-backend": "cd backend && npm run server:prod"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ohad254682/Checkers"
+  },
+  "keywords": ["checkers", "game", "multiplayer", "react", "nodejs", "socketio"],
+  "author": "Ohad",
+  "license": "MIT"
+}
