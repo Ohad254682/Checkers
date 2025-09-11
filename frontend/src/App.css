@@ -158,6 +158,14 @@ tbody {
     margin-bottom: 10px;
   }
   
+  .help-button {
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
+    bottom: 5px;
+    right: 5px;
+  }
+  
   .msg {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -463,6 +471,14 @@ td {
 
 /* Responsive confetti for mobile */
 @media (max-width: 768px) {
+  .help-button {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+    bottom: 10px;
+    right: 10px;
+  }
+  
   .confetti-container {
     /* Reduce confetti density on mobile for better performance */
   }
