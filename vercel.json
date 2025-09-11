@@ -5,7 +5,10 @@
       "src": "frontend/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "build"
+        "distDir": "build",
+        "env": {
+          "NODE_OPTIONS": "--openssl-legacy-provider"
+        }
       }
     }
   ],
@@ -14,8 +17,5 @@
       "src": "/(.*)",
       "dest": "frontend/build/$1"
     }
-  ],
-  "env": {
-    "NODE_OPTIONS": "--openssl-legacy-provider"
-  }
+  ]
 }
