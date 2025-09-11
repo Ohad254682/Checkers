@@ -20,7 +20,8 @@ COPY backend/ ./backend/
 ENV NODE_OPTIONS="--openssl-legacy-provider"
 RUN cd frontend && npm run build
 
-# Copy built frontend to backend public folder
+# Create backend public directory and copy built frontend
+RUN mkdir -p backend/public
 RUN cp -r frontend/build/* backend/public/
 
 # Expose port
