@@ -1,11 +1,13 @@
 /*App*/
 table {
   width: 35vw;
-  height: 70vh;
+  height: 35vw;
   margin: 0px auto;
   margin-bottom: 30px;
   min-width: 300px;
   min-height: 300px;
+  max-width: 70vh;
+  max-height: 70vh;
 }
 
 tbody {
@@ -26,108 +28,150 @@ tbody {
 }
 
 .instructions-panel {
-  background: linear-gradient(135deg, #111827 0%, #0b1220 100%);
-  color: #e5e7eb;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-  height: fit-content;
-  position: absolute;
-  top: 0;
-  left: calc(100% + 24px);
-  width: 280px;
+  display: none; /* Hide sidebar instructions completely */
 }
 
 /* Tablet Styles */
 @media (max-width: 1024px) {
   table {
-    width: 50vw;
+    width: 60vh;
     height: 60vh;
     min-width: 350px;
     min-height: 350px;
+    max-width: 60vh;
+    max-height: 60vh;
+    margin-bottom: 15px;
   }
   
   .instructions-panel {
-    width: 250px;
-    left: calc(100% + 16px);
-  }
-}
-
-/* Mobile Styles */
-@media (max-width: 768px) {
-  table {
-    width: 90vw;
-    height: 50vh;
-    min-width: 280px;
-    min-height: 280px;
-    margin-bottom: 20px;
+    display: none; /* Hide instructions panel on tablet */
   }
   
   .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 16px;
-  }
-  
-  .instructions-panel {
-    position: static;
     width: 100%;
-    max-width: 400px;
-    margin-top: 16px;
-    margin-bottom: 20px;
-  }
-  
-  .board-game {
-    order: 1;
-  }
-  
-  .instructions-panel {
-    order: 2;
-  }
-}
-
-/* Small Mobile Styles */
-@media (max-width: 480px) {
-  table {
-    width: 95vw;
-    height: 45vh;
-    min-width: 250px;
-    min-height: 250px;
-  }
-  
-  .instructions-panel {
-    padding: 12px;
-    margin-top: 12px;
-  }
-  
-  .instructions-panel h3 {
-    font-size: 16px;
-  }
-  
-  .instructions-panel ul {
-    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
   .msg {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    padding: 10px 12px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 8px 12px;
     font-size: 14px;
   }
   
-  .restart-game,
-  .test-celebration {
+  .restart-game {
     padding: 8px 12px;
     font-size: 14px;
-    margin: 10px 5px;
+    margin: 5px;
   }
   
   .choose-player1,
   .choose-player2 {
     padding: 8px 12px;
     font-size: 14px;
-    margin: 5px 4px;
+    margin: 3px;
+  }
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  table {
+    width: 70vh;
+    height: 70vh;
+    min-width: 280px;
+    min-height: 280px;
+    max-width: 70vh;
+    max-height: 70vh;
+    margin-bottom: 15px;
+  }
+  
+  .content {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+  }
+  
+  .instructions-panel {
+    display: none; /* Hide instructions panel on mobile */
+  }
+  
+  .board-game {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .msg {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+  
+  .restart-game {
+    padding: 8px 12px;
+    font-size: 14px;
+    margin: 5px;
+  }
+  
+  .choose-player1,
+  .choose-player2 {
+    padding: 8px 12px;
+    font-size: 14px;
+    margin: 3px;
+  }
+}
+
+/* Small Mobile Styles */
+@media (max-width: 480px) {
+  table {
+    width: 65vh;
+    height: 65vh;
+    min-width: 250px;
+    min-height: 250px;
+    max-width: 65vh;
+    max-height: 65vh;
+    margin-bottom: 10px;
+  }
+  
+  .msg {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+  
+  .restart-game {
+    padding: 6px 10px;
+    font-size: 13px;
+    margin: 3px;
+  }
+  
+  .choose-player1,
+  .choose-player2 {
+    padding: 6px 10px;
+    font-size: 13px;
+    margin: 2px;
+  }
+  
+  .instructions-modal-content {
+    width: 95vw;
+    padding: 24px;
+    max-height: 80vh;
+  }
+  
+  .instructions-modal h3 {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+  
+  .instructions-modal li {
+    font-size: 16px;
+    margin-bottom: 12px;
   }
 }
 
@@ -285,6 +329,116 @@ td {
   inset: 0;
   overflow: hidden;
   z-index: 9999;
+}
+
+/* Instructions Modal */
+.instructions-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.instructions-modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.instructions-modal-content {
+  background: linear-gradient(135deg, #111827 0%, #0b1220 100%);
+  color: #e5e7eb;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  max-width: 95vw;
+  max-height: 85vh;
+  width: 800px;
+  overflow-y: auto;
+  position: relative;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.instructions-modal.show .instructions-modal-content {
+  transform: scale(1);
+}
+
+.instructions-modal h3 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-size: 32px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.instructions-modal ul {
+  margin: 0;
+  padding-left: 24px;
+  line-height: 1.8;
+}
+
+.instructions-modal li {
+  margin-bottom: 18px;
+  font-size: 20px;
+}
+
+.close-modal {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: #e5e7eb;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.close-modal:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.help-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.help-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.help-button:active {
+  transform: translateY(0);
+}
+
+/* Show help button on all screens */
+.help-button {
+  display: block;
 }
 
 /* Responsive confetti for mobile */

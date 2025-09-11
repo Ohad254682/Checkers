@@ -19,7 +19,8 @@ export default class App extends Component {
     isMultipleCapture: false,
     isWon: false,
     winner: null,
-    player: null
+    player: null,
+    showInstructionsModal: false
   }
 
   componentDidMount() {
@@ -456,6 +457,14 @@ export default class App extends Component {
     SocketService.emit('sendPlayer', player);
   }
 
+  toggleInstructionsModal = () => {
+    this.setState({ showInstructionsModal: !this.state.showInstructionsModal });
+  }
+
+  closeInstructionsModal = () => {
+    this.setState({ showInstructionsModal: false });
+  }
+
   render() {
     return (
       <div className="flex column justify-center align-center">
@@ -489,6 +498,27 @@ export default class App extends Component {
         </div>
         <button className="restart-game" onClick={this.restartGame}>Restart Game</button>
         {/* <button onClick={this.undoBoard}>Undo</button> */}
+        
+        {/* Help Button for Mobile/Tablet */}
+        <button className="help-button" onClick={this.toggleInstructionsModal}>?</button>
+        
+        {/* Instructions Modal */}
+        <div className={`instructions-modal ${this.state.showInstructionsModal ? 'show' : ''}`} onClick={this.closeInstructionsModal}>
+          <div className="instructions-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-modal" onClick={this.closeInstructionsModal}>×</button>
+            <h3>How to Play Checkers</h3>
+            <ul>
+              <li>Select a player to begin.</li>
+              <li>Pieces move diagonally on dark squares.</li>
+              <li>Capture by jumping over opponent pieces.</li>
+              <li>Multiple jumps are allowed in one turn.</li>
+              <li>Reach the opposite side to become a King.</li>
+              <li>Kings move and capture both forward and backward.</li>
+              <li>If a capture is available, you must take it.</li>
+              <li>Win by capturing all opponent pieces.</li>
+            </ul>
+          </div>
+        </div>
       </div>
     )
   }
