@@ -4,6 +4,8 @@ table {
   height: 70vh;
   margin: 0px auto;
   margin-bottom: 30px;
+  min-width: 300px;
+  min-height: 300px;
 }
 
 tbody {
@@ -18,6 +20,10 @@ tbody {
 .content {
   display: inline-block;
   position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
 }
 
 .instructions-panel {
@@ -33,11 +39,105 @@ tbody {
   width: 280px;
 }
 
-@media (max-width: 900px) {
+/* Tablet Styles */
+@media (max-width: 1024px) {
+  table {
+    width: 45vw;
+    height: 60vh;
+  }
+  
   .instructions-panel {
     position: static;
     width: auto;
     margin-top: 16px;
+    max-width: 100%;
+  }
+  
+  .content {
+    padding: 0 12px;
+  }
+}
+
+/* Mobile Landscape */
+@media (max-width: 768px) {
+  table {
+    width: 60vw;
+    height: 50vh;
+    min-width: 280px;
+    min-height: 280px;
+  }
+  
+  .instructions-panel {
+    padding: 12px;
+    margin-top: 12px;
+  }
+  
+  .instructions-panel h3 {
+    font-size: 16px;
+  }
+  
+  .instructions-panel ul {
+    font-size: 14px;
+  }
+  
+  .content {
+    padding: 0 8px;
+  }
+}
+
+/* Mobile Portrait */
+@media (max-width: 480px) {
+  table {
+    width: 90vw;
+    height: 45vh;
+    min-width: 250px;
+    min-height: 250px;
+    margin-bottom: 20px;
+  }
+  
+  .instructions-panel {
+    padding: 10px;
+    margin-top: 10px;
+  }
+  
+  .instructions-panel h3 {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  
+  .instructions-panel ul {
+    font-size: 12px;
+    padding-left: 16px;
+  }
+  
+  .instructions-panel li {
+    margin-bottom: 6px;
+  }
+  
+  .content {
+    padding: 0 4px;
+  }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 360px) {
+  table {
+    width: 95vw;
+    height: 40vh;
+    min-width: 220px;
+    min-height: 220px;
+  }
+  
+  .instructions-panel {
+    padding: 8px;
+  }
+  
+  .instructions-panel h3 {
+    font-size: 13px;
+  }
+  
+  .instructions-panel ul {
+    font-size: 11px;
   }
 }
 
@@ -149,6 +249,26 @@ td {
   font-weight: 600;
 }
 
+/* Responsive Message Styles */
+@media (max-width: 768px) {
+  .msg {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .msg {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 8px 12px;
+    font-size: 12px;
+    border-radius: 10px;
+  }
+}
+
 .must-capture {
   margin-left: 12px;
   background: rgba(252, 165, 3, 0.15);
@@ -180,6 +300,23 @@ td {
   box-shadow: 0 12px 36px rgba(0,0,0,0.35);
   border: 1px solid rgba(255,255,255,0.15);
   animation: banner-pop 500ms ease-out;
+}
+
+/* Responsive Winner Banner */
+@media (max-width: 768px) {
+  .winner-banner {
+    padding: 12px 18px;
+    font-size: 18px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .winner-banner {
+    padding: 10px 14px;
+    font-size: 16px;
+    border-radius: 10px;
+  }
 }
 
 @keyframes banner-pop {
@@ -265,6 +402,35 @@ td {
   outline-offset: 2px;
 }
 
+/* Responsive Button Styles */
+@media (max-width: 768px) {
+  .restart-game {
+    padding: 8px 16px;
+    font-size: 14px;
+    margin: 15px;
+  }
+  
+  .test-celebration {
+    padding: 8px 16px;
+    font-size: 14px;
+    margin: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .restart-game {
+    padding: 6px 12px;
+    font-size: 12px;
+    margin: 10px;
+  }
+  
+  .test-celebration {
+    padding: 6px 12px;
+    font-size: 12px;
+    margin: 10px;
+  }
+}
+
 .test-celebration {
   border: 0px;
   box-shadow: inset 0px 0px 9px 3px rgba(255, 107, 107, 0.308), 0 6px 18px rgba(0, 0, 0, 0.15);
@@ -311,6 +477,24 @@ td {
   cursor: pointer;
   transition: transform 120ms ease, box-shadow 200ms ease, filter 200ms ease;
   box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+/* Responsive Player Selection Buttons */
+@media (max-width: 768px) {
+  .choose-player1,
+  .choose-player2 {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .choose-player1,
+  .choose-player2 {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
   color: #0b1020;
   margin-left: 8px;
 }
