@@ -8,6 +8,11 @@ const connectSockets = require('./api/socket/socket.routes')
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.resolve(__dirname, 'public')));
+    
+    // Serve React app for all routes
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+    });
 } else {
     // Simple CORS for development
     app.use((req, res, next) => {
