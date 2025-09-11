@@ -29,4 +29,4 @@ EXPOSE 3000
 
 # Start backend server
 WORKDIR /app/backend
-CMD ["npm", "run", "server:prod"]
+CMD ["node", "server.js"]
