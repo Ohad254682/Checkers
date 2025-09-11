@@ -1,13 +1,13 @@
 /*App*/
 table {
-  width: 50vh;
-  height: 50vh;
+  width: 60vh;
+  height: 60vh;
   margin: 0px auto;
   margin-bottom: 15px;
-  min-width: 300px;
-  min-height: 300px;
-  max-width: 50vh;
-  max-height: 50vh;
+  min-width: 400px;
+  min-height: 400px;
+  max-width: 60vh;
+  max-height: 60vh;
 }
 
 tbody {
