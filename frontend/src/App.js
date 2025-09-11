@@ -18,6 +18,7 @@ export default class App extends Component {
     numOfTurnIndex: 0,
     isMultipleCapture: false,
     isWon: false,
+    winner: null,
     player: null
   }
 
@@ -32,37 +33,12 @@ export default class App extends Component {
     SocketService.on('setPlayer', this.setPlayer);
   }
 
-  setPlayer = (player) => {
-    this.setState({ player })
-  }
-
-  updateRestart = () => {
-    this.createBoard();
-    this.setState({ turn: 'Player1' },
-      this.setState({ selectedCell: null },
-        this.setState({ isAbleToCapture: false },
-          this.setState({ isWon: false }))))
-  }
-  updateWon = () => {
-    this.setState({ isWon: true })
-  }
-
-  updateWithoutSwitchTurn = (board) => {
-    this.setState({ board })
-  }
-
-  updateBoard = (board) => {
-    this.setState({ board }, () => {
-      this.setState({ isAbleToCapture: false },
-        this.switchTurn)
-    })
-  }
-
-  createBoard = () => {
-    let board = [];
-    for (let i = 0; i < this.state.size; i++) {
+  buildInitialBoard = () => {
+    const size = this.state.size;
+    const board = [];
+    for (let i = 0; i < size; i++) {
       board[i] = [];
-      for (let j = 0; j < this.state.size; j++) {
+      for (let j = 0; j < size; j++) {
         if (i >= 0 && i <= 2 && (i + j) % 2 !== 0) {
           board[i][j] = 'Player1'
         }
@@ -74,6 +50,65 @@ export default class App extends Component {
         }
       }
     }
+    return board;
+  }
+
+  setPlayer = (player) => {
+    if (this.state.player) return;
+    const other = player === 'Player1' ? 'Player2' : 'Player1';
+    this.setState({ player: other })
+  }
+
+  updateRestart = () => {
+    const board = this.buildInitialBoard();
+    this.setState({
+      board,
+      selectedCell: null,
+      isAbleToCapture: false,
+      isWon: false,
+      isMultipleCapture: false,
+      undoBoardStates: [],
+      numOfTurnIndex: 0,
+      turn: 'Player1',
+      player: null
+    })
+  }
+  updateWon = (winner) => {
+    if (!winner) return;
+    this.setState({ isWon: true, winner })
+  }
+
+  updateWithoutSwitchTurn = (payload) => {
+    const board = payload.board || payload;
+    const turn = payload.turn || this.state.turn;
+    this.setState({ board, turn }, () => {
+      const winnerFromBoard = this.isGameWon();
+      if (winnerFromBoard && !this.state.isWon) {
+        this.setState({ isWon: true, winner: winnerFromBoard });
+      }
+    })
+  }
+
+  updateBoard = (payload) => {
+    const board = payload.board || payload;
+    const turn = payload.turn || this.state.turn;
+    this.setState({ board, turn }, () => {
+      this.setState({ isAbleToCapture: false },
+        this.switchTurn)
+      const winnerFromBoard = this.isGameWon();
+      if (winnerFromBoard && !this.state.isWon) {
+        this.setState({ isWon: true, winner: winnerFromBoard });
+      }
+    })
+  }
+
+  testCelebrate = () => {
+    const winner = this.state.player || this.state.turn;
+    this.setState({ isWon: true, winner });
+  }
+
+  createBoard = () => {
+    const board = this.buildInitialBoard();
     this.setState({ board })
   }
 
@@ -131,17 +166,19 @@ export default class App extends Component {
     }
   }
 
-  isKing = (cell) => {
+  isKing = (cell, nextTurn) => {
     let board = this.state.board;
     if ((board[cell.row][cell.col].includes('Player1') && cell.row === this.state.size - 1) ||
       (board[cell.row][cell.col].includes('Player2') && cell.row === 0)) {
       board[cell.row][cell.col] += ' King';
-      SocketService.emit('sendKing', board);
+      const turnToBroadcast = nextTurn || this.state.turn;
+      SocketService.emit('sendKing', { board, turn: turnToBroadcast });
       this.setState({ board })
     }
   }
 
   finishMove = (cell) => {
+    const movingPlayer = this.state.turn; // capture the player who just moved
     if (!this.state.isMultipleCapture) {
       this.setState({ selectedCell: null },
         this.setState({ isAbleToCapture: false },
@@ -152,10 +189,14 @@ export default class App extends Component {
       this.setState({ selectedCell: cell },
         this.setState({ numOfTurnIndex: ++this.state.numOfTurnIndex }))
     }
-    this.isKing(cell);
-    if (this.isGameWon()) {
-      this.setState({ isWon: true })
-      SocketService.emit('sendWon')
+    const currentTurn = this.state.turn;
+    const nextTurn = this.state.isMultipleCapture ? currentTurn : (currentTurn === 'Player1' ? 'Player2' : 'Player1');
+    this.isKing(cell, nextTurn);
+    const winnerFromBoard = this.isGameWon();
+    if (winnerFromBoard) {
+      // Show locally and broadcast so opponent also celebrates
+      this.setState({ isWon: true, winner: winnerFromBoard });
+      SocketService.emit('sendWon', winnerFromBoard)
     }
   }
 
@@ -173,7 +214,7 @@ export default class App extends Component {
     let board = this.state.board;
     board[cell.row][cell.col] = selectedCell.checker;
     board[selectedCell.row][selectedCell.col] = '';
-    SocketService.emit('sendBoard', board);
+    SocketService.emit('sendBoard', { board, turn: this.state.turn });
     this.setState({ board }, this.finishMove(cell));
   }
 
@@ -248,6 +289,7 @@ export default class App extends Component {
     let board = this.state.board;
     board[cell.row][cell.col] = selectedCell.checker;
     board[selectedCell.row][selectedCell.col] = '';
+    SocketService.emit('sendBoard', { board, turn: this.state.turn });
     if (selectedCell.checker.includes('King')) {
       switch (selectedCell.row - cell.row) {
         case -2: {
@@ -292,13 +334,13 @@ export default class App extends Component {
       if (this.isSelectedCellAbleToCapture(cell)) {
         this.setState({ isMultipleCapture: true }, () => {
           this.finishMove(cell)
-          SocketService.emit('sendMultipleCapture', board);
+          SocketService.emit('sendMultipleCapture', { board, turn: this.state.turn });
         })
       }
       else {
         this.setState({ isMultipleCapture: false }, () => {
           this.finishMove(cell)
-          SocketService.emit('sendBoard', board);
+          SocketService.emit('sendBoard', { board, turn: this.state.turn });
         })
       }
     });
@@ -367,26 +409,34 @@ export default class App extends Component {
   }
 
   isGameWon = () => {
-    let winnerPlayer1 = true, winnerPlayer2 = true;
+    let hasPlayer1 = false;
+    let hasPlayer2 = false;
     for (let i = 0; i < this.state.size; i++) {
       for (let j = 0; j < this.state.size; j++) {
-        if (this.state.board[i][j].includes('Player1')) {
-          winnerPlayer2 = false;
-        }
-        if (this.state.board[i][j].includes('Player2')) {
-          winnerPlayer1 = false;
-        }
+        if (this.state.board[i][j].includes('Player1')) hasPlayer1 = true;
+        if (this.state.board[i][j].includes('Player2')) hasPlayer2 = true;
+        if (hasPlayer1 && hasPlayer2) break;
       }
+      if (hasPlayer1 && hasPlayer2) break;
     }
-    return winnerPlayer1 || winnerPlayer2;
+    if (!hasPlayer2 && hasPlayer1) return 'Player1';
+    if (!hasPlayer1 && hasPlayer2) return 'Player2';
+    return null;
   }
 
   restartGame = () => {
-    this.createBoard();
-    this.setState({ turn: 'Player1' },
-      this.setState({ selectedCell: null },
-        this.setState({ isAbleToCapture: false },
-          this.setState({ isWon: false }))))
+    const board = this.buildInitialBoard();
+    this.setState({
+      board,
+      selectedCell: null,
+      isAbleToCapture: false,
+      isWon: false,
+      isMultipleCapture: false,
+      undoBoardStates: [],
+      numOfTurnIndex: 0,
+      turn: 'Player1',
+      player: null
+    })
     SocketService.emit('sendRestartGame');
   }
 
@@ -401,21 +451,18 @@ export default class App extends Component {
   }
 
   choosePlayer = (player) => {
+    if (this.state.player) return;
     this.setState({ player });
-    if (player === 'Player1') {
-      SocketService.emit('sendPlayer', 'Player2');
-    }
-    else {
-      SocketService.emit('sendPlayer', 'Player1');
-    }
+    SocketService.emit('sendPlayer', player);
   }
 
   render() {
     return (
       <div className="flex column justify-center align-center">
-        <Message turn={this.state.turn} choosePlayer={this.choosePlayer} player={this.state.player} ></Message>
-        <div className="board-game">
-          <Winner isWon={this.state.isWon}></Winner>
+        <Message turn={this.state.turn} choosePlayer={this.choosePlayer} player={this.state.player} isAbleToCapture={this.state.isAbleToCapture}></Message>
+        <div className="content">
+          <div className="board-game">
+          <Winner isWon={this.state.isWon} winner={this.state.winner}></Winner>
           <table>
             <tbody className="flex column">
               {this.state.board.map((row, i) =>
@@ -425,6 +472,20 @@ export default class App extends Component {
                 </Row>)}
             </tbody>
           </table>
+          </div>
+          <aside className="instructions-panel">
+            <h3>How to Play Checkers</h3>
+            <ul>
+              <li>Select a player to begin.</li>
+              <li>Pieces move diagonally on dark squares.</li>
+              <li>Capture by jumping over opponent pieces.</li>
+              <li>Multiple jumps are allowed in one turn.</li>
+              <li>Reach the opposite side to become a King.</li>
+              <li>Kings move and capture both forward and backward.</li>
+              <li>If a capture is available, you must take it.</li>
+              <li>Win by capturing all opponent pieces.</li>
+            </ul>
+          </aside>
         </div>
         <button className="restart-game" onClick={this.restartGame}>Restart Game</button>
         {/* <button onClick={this.undoBoard}>Undo</button> */}

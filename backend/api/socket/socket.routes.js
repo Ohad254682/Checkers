@@ -3,20 +3,20 @@ module.exports = connectSockets
 
 function connectSockets(io) {
     io.on('connection', socket => {
-        socket.on('sendBoard', board => {
-            socket.broadcast.emit('setBoard', board)
+        socket.on('sendBoard', payload => {
+            socket.broadcast.emit('setBoard', payload)
         })
-        socket.on('sendWon', () => {
-            socket.broadcast.emit('setWon');
+        socket.on('sendWon', (winner) => {
+            io.emit('setWon', winner);
         })
         socket.on('sendRestartGame', () => {
             socket.broadcast.emit('setRestartGame');
         })
-        socket.on('sendMultipleCapture', board => {
-            socket.broadcast.emit('setMultipleCapture', board);
+        socket.on('sendMultipleCapture', payload => {
+            socket.broadcast.emit('setMultipleCapture', payload);
         })
-        socket.on('sendKing', board => {
-            socket.broadcast.emit('setKing', board);
+        socket.on('sendKing', payload => {
+            socket.broadcast.emit('setKing', payload);
         })
         socket.on('sendPlayer', player => {
             socket.broadcast.emit('setPlayer', player);
