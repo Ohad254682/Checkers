@@ -9,8 +9,8 @@ COPY frontend/package*.json ./frontend/
 COPY backend/package*.json ./backend/
 
 # Install dependencies
-RUN cd frontend && npm install
-RUN cd backend && npm install
+RUN npm install --prefix frontend
+RUN npm install --prefix backend
 
 # Copy source code
 COPY frontend/ ./frontend/
@@ -18,7 +18,7 @@ COPY backend/ ./backend/
 
 # Build frontend with OpenSSL legacy provider
 ENV NODE_OPTIONS="--openssl-legacy-provider"
-RUN cd frontend && npm run build
+RUN npm run build --prefix frontend
 
 # Create backend public directory and copy built frontend
 RUN mkdir -p backend/public
