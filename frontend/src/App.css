@@ -162,8 +162,9 @@ tbody {
     width: 35px;
     height: 35px;
     font-size: 14px;
-    bottom: 5px;
+    top: 5px;
     right: 5px;
+    bottom: auto;
   }
   
   .msg {
@@ -475,8 +476,9 @@ td {
     width: 40px;
     height: 40px;
     font-size: 16px;
-    bottom: 10px;
+    top: 10px;
     right: 10px;
+    bottom: auto;
   }
   
   .confetti-container {
